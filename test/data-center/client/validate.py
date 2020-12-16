@@ -21,9 +21,8 @@ def validate(model,data):
 
 
     predictions = model.predict(x_test)
-    
     mse_obj = tf.keras.metrics.MeanAbsoluteError()
-    mse_obj.update_state(predictions, y_test)
+    mse_obj.update_state(predictions,y_test.reshape(-1,1))
     mse_val =   mse_obj.result().numpy()
     
     print("-- validation COMPLETED --")

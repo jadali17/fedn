@@ -13,24 +13,19 @@ from read_data import read_data
 def train(model,data):
     print("-- RUNNING TRAINING --")
 
-    batch_size = 32
-    epochs = 1
 
 
     # The data, split between train and test sets
-    (x_train, y_train) = read_data(data)
+    (X_train, y_train) = read_data(data)
     
-    print("input values")
-    print( x_train.head())
-    print("output values")
-    print( y_train.head())
-    model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size,  verbose=0, validation_split=0.1)
 
+    model.fit(X_train, y_train, epochs=30, batch_size=72, verbose=0)
     print("-- TRAINING COMPLETED --")
     return model
 
 if __name__ == '__main__':
     # Read the model
+    print(" THE SYSTEM ARGUMENT{}".format(sys.argv[1]))
     model = krm.load_model(sys.argv[1])
     model = train(model,'../data/train.csv')
     model.save(sys.argv[2])

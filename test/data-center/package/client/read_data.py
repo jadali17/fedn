@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
@@ -14,21 +14,16 @@ def read_data(filename):
 
     """ Helper function to read and preprocess data for training with Keras. """
     data = pd.read_csv(filename, sep = ',',index_col=[0])
-    header= ['CPU', 'Power', 'Rx', 'Temprature', 'Tx']
- 
-    cs = MinMaxScaler()
 
-    data[header] = cs.fit_transform(data[header])
+    data_set=data[['PM10','NO2','PM2_5','NOX']]
+    X = []
+    y = []
+    for i in range(5, len(data_set)):
+        X.append(data_set.iloc[i-5:i].values)
+        y.append(data_set['PM10'].iloc[i])
 
-    y = data['Power']
-    X = data
-    del X['Power']
+    X, y = np.array(X), np.array(y)
+    
 
-    # The entire dataset is 60k images, we can subsample here for quicker testing. 
-    #if sample_fraction < 1.0:
-    #    foo, X, bar, y = train_test_split(X, y, test_size=sample_fraction)
-    #classes = range(10)
-
-    # The data, split between train and test sets
     return  (X, y)
 

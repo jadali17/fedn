@@ -1,8 +1,9 @@
 import keras
-from keras.layers import Dense, Dropout, Flatten
+from keras.layers import LSTM, Dense,Reshape
 from keras.models import Sequential
 from keras.optimizers import SGD
-
+from keras.models import Sequential
+import tensorflow as tf
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_squared_error
 
@@ -15,20 +16,17 @@ import tempfile
 
 # Create an initial CNN Model
 def create_seed_model():
-        
+        print(tf.__version__)
         model = Sequential()
-
-        model.add(Dense(32, input_dim=4, activation="relu"))
-        model.add(Dense(8, activation="relu"))
+        model.add(LSTM(5, input_shape=(5, 4),return_sequences=False, stateful=False))
         model.add(Dense(1))
-        
-        opt = SGD(lr=0.0001)
-        model.compile(loss = "mae", optimizer = opt,metrics=['mae'])
+   
+        model.compile(loss = "mae", optimizer = 'adam',metrics=['mae'])
         return model
 
 
 if __name__ == '__main__':
-
+        print(tf.__version__)
 	# Create a seed model and push to Minio
 	#model = create_seed_model()
 	#runtime = AllianceRuntimeClient()
@@ -37,9 +35,9 @@ if __name__ == '__main__':
 	
         # Create a seed model and push to Minio
         model = create_seed_model()
-        outfile_name = "9908a112-c861-4cb1-a25d-775153e5543"
+        outfile_name = "../m2314.h5"
         #fod, outfile_name = tempfile.mkstemp(suffix='.h5')
-        model.save(outfile_name)
+        model.save(outfile_name, save_format='h5')
 
         #project = Project()
         #from scaleout.repository.helpers import get_repository
